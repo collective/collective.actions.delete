@@ -30,7 +30,7 @@ from interfaces import IActionCancel
 from interfaces import IActionSuccess
 from interfaces import IActionFailure
 from zope.i18nmessageid import MessageFactory
-_ = MessageFactory('iw.actions.delete')
+_ = MessageFactory('plone')
 
 class Action(object):
 
