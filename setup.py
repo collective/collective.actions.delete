@@ -5,7 +5,7 @@ version = '0.1.0'
 
 setup(name='collective.actions.delete',
       version=version,
-      description="Action in folder content with confirmation",
+      description="Delete items in folder content with confirmation",
       long_description=open("README.txt").read() + "\n" +
                        open(os.path.join("docs", "HISTORY.txt")).read(),
       # Get more strings from http://www.python.org/pypi?%3Aaction=list_classifiers
@@ -15,8 +15,8 @@ setup(name='collective.actions.delete',
         "Topic :: Software Development :: Libraries :: Python Modules",
         ],
       keywords='folder delete confirmation',
-      author='Ingincollectiveeb',
-      author_email='support@ingencollectiveeb.com',
+      author='Ingeniweb',
+      author_email='support@ingeniweb.com',
       url='https://svn.plone.org/svn/collective/collective.actions.delete',
       license='GPL',
       packages=find_packages(exclude=['ez_setup']),
