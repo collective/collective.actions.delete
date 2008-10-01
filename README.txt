@@ -1,8 +1,3 @@
-Introduction
-============
-
-Delete items in folder contents with confirmation.
-
 How to install ?
 ================
 
