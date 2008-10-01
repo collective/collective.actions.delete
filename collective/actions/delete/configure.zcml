@@ -1,0 +1,38 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    xmlns:five="http://namespaces.zope.org/five"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    i18n_domain="collective.actions.delete">
+
+    <five:registerPackage package="." initialize=".initialize" />
+    <browser:page
+        for="OFS.interfaces.IObjectManager"
+        name="folder_delete"
+        class=".browser.FolderDelete"
+        permission="zope2.DeleteObjects"
+        />
+    <adapter
+        factory=".browser.ActionFailure"
+        provides=".interfaces.IActionFailure"
+        />
+    <adapter
+        factory=".browser.ActionCancel"
+        provides=".interfaces.IActionCancel"
+
+        />
+    <adapter
+        factory=".browser.ActionSuccess"
+        provides=".interfaces.IActionSuccess"
+
+        />
+
+    <genericsetup:registerProfile
+      name="default"
+      title="collective.action.delete"
+      directory="profiles/default"
+      description='Extension profile collective.action.delete.'
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
+
+</configure>
