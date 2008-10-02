@@ -55,7 +55,7 @@
 
 
        <!-- to protect the code -->
-       <div tal:replace="structure context/@@authenticator/authenticator" />
+       <div tal:replace="structure context/@@authenticator/authenticator" tal:on-error="nothing"/>
       </form>
 
 
