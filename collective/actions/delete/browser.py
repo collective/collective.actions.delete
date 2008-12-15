@@ -41,7 +41,7 @@ class Action(object):
         self.context = context
 
     def view(self):
-        return self.context.view
+        return self.context.restrictedTraverse('@@folder_contents')
 
     def __call__(self):
         return self.view()()
@@ -53,13 +53,11 @@ class ActionSuccess(Action):
     implements(IActionSuccess)
     adapts(IObjectManager)
 
+
 class ActionFailure(Action):
     __module__ = __name__
     implements(IActionFailure)
     adapts(IObjectManager)
-
-    def view(self):
-        return self.context.restrictedTraverse('@@folder_contents')
 
 
 
@@ -67,9 +65,6 @@ class ActionCancel(Action):
     __module__ = __name__
     implements(IActionCancel)
     adapts(IObjectManager)
-
-    def view(self):
-        return self.context.view
 
 
 
@@ -127,5 +122,3 @@ class FolderDelete(BrowserView):
             self.utils.addPortalMessage(message, type='error')
             view = IActionFailure(self.context).view()
         return view()
-
-
