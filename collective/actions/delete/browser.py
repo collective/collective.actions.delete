@@ -79,9 +79,28 @@ class FolderDelete(BrowserView):
         self.paths = None
         self.portal = getSite()
         self.utils = self.portal.plone_utils
-        if self.request.form.has_key('paths'):
-            self.paths = self.request.form['paths']
+        self.initializePaths()
 
+    def initializePaths(self):
+        form = self.request.form
+        if form.has_key('paths'):
+            paths = form['paths']
+            # strip portal path from paths only when called from
+            # folder_contents but not when called by submitting 
+            # to itself (confirmation screen)
+            if 'confirm' in form and form['confirm'] == 'confirmed':
+                self.paths = paths
+            else:
+                self.paths = [self.strip_portal_path(path) for path in paths]
+
+    def strip_portal_path(self, path):
+        portal_path = self.portal.getPhysicalPath()
+        path = path.split('/')
+        for id in portal_path:
+            if id == path[0]:
+               path.pop(0)
+        return '/'.join(path)
+    
     def action(self):
         """ return name of the view """
         return ('@@%s' % self.__name__)

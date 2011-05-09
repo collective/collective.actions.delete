@@ -21,7 +21,7 @@
         Do you really want to delete those contents ?
       </h1>
 
-
+      <input type="hidden" name="confirm" value="confirmation" />
 
       <ul>
          <tal:items repeat="object_title view/titles">
