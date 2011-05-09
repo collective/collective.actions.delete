@@ -111,12 +111,14 @@ class FolderDelete(BrowserView):
             message = _(u'You must select at least one item.')
             self.utils.addPortalMessage(message)
             return IActionFailure(self.context)()
-        if 'form.button.Cancel' in self.request:
-            return IActionCancel(self.context)()
-        if not 'form.button.Delete' in self.request:
+        # if not self submitted, return confirmation screen
+        if ('form.button.Delete' not in self.request
+            and 'form.button.Cancel' not in self.request):
             return self.delete_confirmation()
-        else:
+        elif 'form.button.Delete' in self.request:
             return self.delete_folder()
+        elif 'form.button.Cancel' in self.request:
+            return IActionCancel(self.context)()
 
     def delete_folder(self):
         """ delete objects """
