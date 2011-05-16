@@ -1,0 +1,13 @@
+msgid ""
+msgstr ""
+"POT-Creation-Date: Fri Feb  8 07:02:27 2008\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Kim Paulissen\n"
+"Language-Team: K.U.Leuven (wms@icts.kuleuven.be)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: zope/app/translation_files/extract.py\n"
+
+msgid "alert_really_delete_contents"
+msgstr "Weet u zeker dat u deze inhoud wilt verwijderen?"
