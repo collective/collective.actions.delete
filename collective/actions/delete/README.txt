@@ -48,7 +48,7 @@ Go to folder contents and delete the content::
     >>> 'Do you really want to delete those contents ?' in browser.contents
     True
     >>> browser.getControl('Delete').click()
-    >>> 'Document 1 (/plone/document-1) deleted.' in browser.contents
+    >>> 'Document 1 (document-1) deleted.' in browser.contents
     True
 
 Now test with two content (one is lock and one is removable)::
@@ -69,9 +69,25 @@ Ok and now we try to delete document1 and document2::
     >>> 'Do you really want to delete those contents ?' in browser.contents
     True
     >>> browser.getControl('Delete').click()
-    >>> 'Document 1 (/plone/document1) deleted.' in browser.contents
+    >>> 'Document 1 (document1) deleted.' in browser.contents
     True
-    >>> '/plone/document2 (Object "document2" is locked via WebDAV)'  in browser.contents
+    >>> 'document2 (Object "document2" is locked via WebDAV) could not be deleted.'  in browser.contents
     True
 
+An issue mentioned by an user show that deleting a document with a non ASCII
+title raise an Unicode Error.
 
+    >>> self.portal.invokeFactory('Document', 'document3', title=u'Doc\xfcment 3')
+    'document3'
+    >>> self.portal['document3'].Title()
+    'Doc\xc3\xbcment 3'
+
+Yes the title created in Unicode is now in utf-8 (?) Now we try to delete that
+new document.
+
+    >>> browser.open('http://nohost/plone/@@folder_delete?paths:list=/plone/document3')
+    >>> 'Do you really want to delete those contents ?' in browser.contents
+    True
+    >>> browser.getControl('Delete').click()
+    >>> 'Doc\xc3\xbcment 3 1 (document3) deleted.' in browser.contents
+    True
