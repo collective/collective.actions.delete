@@ -4,6 +4,9 @@ Changelog
 0.1.4 (unreleased)
 ------------------
 
+- Removing items who's title has non ASCII chars works (+ test)
+  [glenfant]
+
 - Added german translation.
   [jone]
 

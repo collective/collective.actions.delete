@@ -15,19 +15,28 @@
 ## along with this program; see the file COPYING. If not, write to the
 ## Free Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-
+import unicodedata
+import transaction
+from Acquisition import aq_parent, aq_inner
+from ZODB.POSException import ConflictError
+from OFS.interfaces import IObjectManager
 from zope.interface import implements
 from Products.Five.browser import BrowserView
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from zope.app.component.hooks import getSite
 from zope.component import adapts
-from OFS.interfaces import IObjectManager
+from plone.app.linkintegrity.exceptions import LinkIntegrityNotificationException
+from zope.i18nmessageid import MessageFactory
+from Products.CMFPlone.utils import getSiteEncoding
+from Products.CMFPlone.utils import getFSVersionTuple
+from Products.CMFPlone.utils import transaction_note
+
 from interfaces import IFolderDelete
 from interfaces import IAction
 from interfaces import IActionCancel
 from interfaces import IActionSuccess
 from interfaces import IActionFailure
-from zope.i18nmessageid import MessageFactory
+
 _ = MessageFactory('plone')
 
 
@@ -123,8 +132,12 @@ class FolderDelete(BrowserView):
     def delete_folder(self):
         """ delete objects """
         self.request.set('link_integrity_events_to_expect', len(self.paths))
-        (success, failure,) = self.utils.deleteObjectsByPaths(self.paths,
-            REQUEST=self.request)
+        if getFSVersionTuple() > (4, 0):
+            # Using the legacy method from Plone 4
+            success, failure = self.utils.deleteObjectsByPaths(self.paths, REQUEST=self.request)
+        else:
+            ## Using custom method up to Plone 3
+            success, failure = self.deleteObjectsByPaths(self.paths, REQUEST=self.request)
         if success:
             self.status = 'success'
             mapping = {u'items': ', '.join(success)}
@@ -139,3 +152,55 @@ class FolderDelete(BrowserView):
             self.utils.addPortalMessage(message, type='error')
             view = IActionFailure(self.context).view()
         return view()
+
+    def deleteObjectsByPaths(self, paths, handle_errors=True, REQUEST=None):
+        """Copy of deleteObjectsByPaths of the method of same name in
+        ``Products.CMFPlone.PloneTool.PloneTool``.
+        We just know that
+        """
+        failure = {}
+        success = []
+        # use the portal for traversal in case we have relative paths
+        portal = getSite()
+        traverse = portal.restrictedTraverse
+        charset = getSiteEncoding(self.context)
+        for path in paths:
+            # Skip and note any errors
+            if handle_errors:
+                sp = transaction.savepoint(optimistic=True)
+            try:
+                obj = traverse(path)
+
+                # Check for the case where a path to a nonexisting object
+                # deletes an acquired object
+                if path.startswith('/'):
+                    absolute_path = path
+                else:
+                    portal_path = '/'.join(portal.getPhysicalPath())
+                    absolute_path = "%s/%s" % (portal_path, path)
+                if '/'.join(obj.getPhysicalPath()) != absolute_path:
+                    raise
+                # end check
+
+                obj_parent = aq_parent(aq_inner(obj))
+                obj_parent.manage_delObjects([obj.getId()])
+                # PATCH: support for content with non ASCII chars
+                title_or_id = obj.title_or_id()
+                if not isinstance(title_or_id, unicode):
+                    title_or_id = unicode(title_or_id, charset, 'ignore')
+                # Transform in plain ASCII
+                title_or_id = unicodedata.normalize('NFKD', title_or_id).encode('ascii','ignore')
+                success.append('%s (%s)' % (title_or_id, path))
+                # /PATCH
+            except ConflictError:
+                raise
+            except LinkIntegrityNotificationException:
+                raise
+            except Exception, e:
+                if handle_errors:
+                    sp.rollback()
+                    failure[path] = e
+                else:
+                    raise
+        transaction_note('Deleted %s' % (', '.join(success)))
+        return success, failure

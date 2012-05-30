@@ -89,5 +89,5 @@ new document.
     >>> 'Do you really want to delete those contents ?' in browser.contents
     True
     >>> browser.getControl('Delete').click()
-    >>> 'Doc\xc3\xbcment 3 1 (document3) deleted.' in browser.contents
+    >>> 'Document 3 (document3) deleted.' in browser.contents
     True
