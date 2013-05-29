@@ -23,7 +23,10 @@ from OFS.interfaces import IObjectManager
 from zope.interface import implements
 from Products.Five.browser import BrowserView
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
-from zope.app.component.hooks import getSite
+try:
+    from zope.app.component.hooks import getSite
+except ImportError:
+    from zope.component.hooks import getSite
 from zope.component import adapts
 from plone.app.linkintegrity.exceptions import LinkIntegrityNotificationException
 from zope.i18nmessageid import MessageFactory
