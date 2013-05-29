@@ -6,14 +6,13 @@ version = '0.1.3'
 setup(name='collective.actions.delete',
       version=version,
       description="Delete items in folder content with confirmation",
-      long_description=open("README.txt").read() + "\n" +
-                       open(os.path.join("docs", "HISTORY.txt")).read(),
-      # Get more strings from http://www.python.org/pypi?%3Aaction=list_classifiers
+      long_description=open("README.rst").read() + "\n" +
+      open(os.path.join("docs", "HISTORY.txt")).read(),
       classifiers=[
           "Framework :: Plone",
           "Programming Language :: Python",
           "Topic :: Software Development :: Libraries :: Python Modules",
-          ],
+      ],
       keywords='folder delete confirmation',
       author='Ingeniweb',
       author_email='support@ingeniweb.com',
@@ -26,7 +25,7 @@ setup(name='collective.actions.delete',
       install_requires=[
           'setuptools',
           # -*- Extra requirements: -*-
-          ],
+      ],
       entry_points="""
       # -*- Entry points: -*-
       [z3c.autoinclude.plugin]
