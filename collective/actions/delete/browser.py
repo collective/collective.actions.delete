@@ -28,7 +28,8 @@ try:
 except ImportError:
     from zope.component.hooks import getSite
 from zope.component import adapts
-from plone.app.linkintegrity.exceptions import LinkIntegrityNotificationException
+from plone.app.linkintegrity.exceptions import (
+    LinkIntegrityNotificationException)
 from zope.i18nmessageid import MessageFactory
 from Products.CMFPlone.utils import getSiteEncoding
 from Products.CMFPlone.utils import getFSVersionTuple
@@ -125,7 +126,7 @@ class FolderDelete(BrowserView):
             return IActionFailure(self.context)()
         # if not self submitted, return confirmation screen
         if ('form.button.Delete' not in self.request
-            and 'form.button.Cancel' not in self.request):
+                and 'form.button.Cancel' not in self.request):
             return self.delete_confirmation()
         elif 'form.button.Delete' in self.request:
             return self.delete_folder()
@@ -137,10 +138,12 @@ class FolderDelete(BrowserView):
         self.request.set('link_integrity_events_to_expect', len(self.paths))
         if getFSVersionTuple() > (4, 0):
             # Using the legacy method from Plone 4
-            success, failure = self.utils.deleteObjectsByPaths(self.paths, REQUEST=self.request)
+            success, failure = self.utils.deleteObjectsByPaths(
+                self.paths, REQUEST=self.request)
         else:
             ## Using custom method up to Plone 3
-            success, failure = self.deleteObjectsByPaths(self.paths, REQUEST=self.request)
+            success, failure = self.deleteObjectsByPaths(
+                self.paths, REQUEST=self.request)
         if success:
             self.status = 'success'
             mapping = {u'items': ', '.join(success)}
@@ -148,10 +151,10 @@ class FolderDelete(BrowserView):
             self.utils.addPortalMessage(message)
             view = IActionSuccess(self.context).view()
         if failure:
-            failure_message = ', '.join([('%s (%s)' % (x,
-                str(y))) for (x, y,) in failure.items()])
+            failure_message = ', '.join(
+                [('%s (%s)' % (x, str(y))) for (x, y,) in failure.items()])
             message = _(u'${items} could not be deleted.',
-                mapping={u'items': failure_message})
+                        mapping={u'items': failure_message})
             self.utils.addPortalMessage(message, type='error')
             view = IActionFailure(self.context).view()
         return view()
@@ -192,7 +195,8 @@ class FolderDelete(BrowserView):
                 if not isinstance(title_or_id, unicode):
                     title_or_id = unicode(title_or_id, charset, 'ignore')
                 # Transform in plain ASCII
-                title_or_id = unicodedata.normalize('NFKD', title_or_id).encode('ascii','ignore')
+                title_or_id = unicodedata.normalize(
+                    'NFKD', title_or_id).encode('ascii', 'ignore')
                 success.append('%s (%s)' % (title_or_id, path))
                 # /PATCH
             except ConflictError:
