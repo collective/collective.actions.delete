@@ -1,0 +1,8 @@
+  include *.rst
+  recursive-include collective *.po
+  recursive-include collective *.pt
+  recursive-include collective *.txt
+  recursive-include collective *.xml
+  recursive-include collective *.zcml
+  recursive-include docs *.GPL
+  recursive-include docs *.txt
