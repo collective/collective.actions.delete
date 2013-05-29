@@ -25,5 +25,5 @@ Credits and support
 ===================
 
 * Alter Way
-* Youenn Boussard `youenn.boussard@alterway.fr`_
-* Gilles lenfant `gilles.lenfant@alterway.fr`_
+* Youenn Boussard
+* Gilles Lenfant
