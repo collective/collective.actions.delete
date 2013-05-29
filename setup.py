@@ -9,6 +9,9 @@ setup(name='collective.actions.delete',
       long_description=open("README.rst").read() + "\n" +
       open(os.path.join("docs", "HISTORY.txt")).read(),
       classifiers=[
+          "Programming Language :: Python",
+          "Programming Language :: Python :: 2.6",
+          "Programming Language :: Python :: 2.7",
           "Framework :: Plone",
           "Framework :: Plone :: 4.3",
           "Framework :: Plone :: 4.1",
