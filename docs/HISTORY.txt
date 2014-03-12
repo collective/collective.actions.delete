@@ -4,8 +4,8 @@ Changelog
 0.1.5 (unreleased)
 ------------------
 
-- Nothing changed yet.
-
+- Plone 4.3.3 support
+  [spereverde]
 
 0.1.4 (2013-05-29)
 ------------------
