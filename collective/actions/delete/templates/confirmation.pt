@@ -11,9 +11,7 @@
   <body>
 
     <div metal:fill-slot="main">
-       <form method="POST"
-            action="#"
-            tal:attributes="action view/action">
+      
       <h1 class="documentFirstHeading"
           i18n:translate="alert_really_delete_contents"
           i18n:domain="collective.actions.delete"
@@ -21,16 +19,20 @@
         Do you really want to delete those contents ?
       </h1>
 
-      <input type="hidden" name="confirm" value="confirmation" />
-
       <ul>
-         <tal:items repeat="object_title view/titles">
+         <tal:titles repeat="object_title view/titles">
           <li tal:content="object_title">The item title (ID)</li>
-          <input type="hidden" name="paths:list" value="plone/page"
-                                 tal:attributes="value object_title" />
-         </tal:items>
+         </tal:titles>
       </ul>
-
+       
+      <form method="POST"
+            action="#"
+            tal:attributes="action view/action">
+        
+        <tal:items repeat="path view/paths">
+          <input type="hidden" name="paths:list" value="plone/page"
+                                 tal:attributes="value path " />
+        </tal:items>
 
         <div class="formControls">
 
