@@ -24,7 +24,7 @@ setup(name='collective.actions.delete',
       url='https://svn.plone.org/svn/collective/collective.actions.delete',
       license='GPL',
       packages=find_packages(exclude=['ez_setup']),
-      namespace_packages=['collective'],
+      namespace_packages=['collective', 'collective.actions'],
       include_package_data=True,
       zip_safe=False,
       install_requires=[
